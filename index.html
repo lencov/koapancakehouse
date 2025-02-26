@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Koa Pancake House</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: 'Raleway', sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      a {
+        text-decoration: none; /* Underlines specifically for nav links below */
+        color: inherit;
+      }
+
+      /* HERO (eggs benedict in background) */
+      .hero {
+        min-height: 60vh; /* adjust as needed */
+        background: url("https://images.squarespace-cdn.com/content/v1/547225efe4b0922a0c06a8ba/1529615701930-XMBNTDOF0GQA9K3NL635/eggsbene.jpg")
+          center center / cover no-repeat;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+      .hero-overlay {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0); /* if you want a tinted overlay, adjust here */
+      }
+
+      /* Centered logo at top of hero */
+      .hero-logo {
+        z-index: 2;
+        margin-bottom: 1rem;
+      }
+      .hero-logo img {
+        max-width: 220px;
+      }
+
+      /* NAV links: smaller text, orange, underlined */
+      .hero-nav {
+        z-index: 2;
+        margin-bottom: 1rem; /* space under nav before the button */
+      }
+      .hero-nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .hero-nav a {
+        color: orange;
+        text-decoration: underline;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+      }
+
+      /* Big ORDER ONLINE button (orange background, black text, rectangular) */
+      .hero-button {
+        z-index: 2;
+        background-color: orange; /* Orange background */
+        color: #000;             /* Black text */
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 2px;
+        font-weight: 600;
+        text-transform: uppercase;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .hero-button:hover {
+        opacity: 0.9;
+      }
+
+      /* Additional sections from original code: layout, etc. */
+      .index-section {
+        position: relative;
+        margin: 0 auto;
+      }
+      .index-section-wrapper {
+        position: relative;
+      }
+      .index-section-image img {
+        width: 100%;
+        display: block;
+        object-fit: cover;
+      }
+      .content-inner {
+        padding: 2rem 1rem;
+      }
+      .gallery-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .slide-wrapper {
+        width: calc(50% - 0.5rem);
+      }
+      .slide-wrapper img {
+        width: 100%;
+        height: auto;
+      }
+
+      /* Footer, etc... */
+      #preFooter {
+        background: #eee;
+        padding: 2rem;
+      }
+      .social-icon-alignment-center {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+      }
+      .sqs-svg-icon--wrapper {
+        width: 40px; height: 40px;
+        background: #fff;
+        border-radius: 50%;
+      }
+      #footer {
+        background: #f9f9f9;
+        padding: 2rem;
+      }
+      
+      /* Slightly darken the entire page */
+      body {
+        background-color: #f1f1f1;
+        color: #343434;
+      }
+      
+      /* Move the logo up */
+      .hero-logo {
+        margin-top: -40px;
+      }
+      
+      /* Make the order online button larger */
+      .hero-button {
+        font-size: 1.2em;
+        padding: 15px 30px;
+        transform: scale(1.2);
+      }
+    </style>
+  </head>
+
+  <body>
+
+     <!-- HERO with eggs benedict BG -->
+     <section class="hero">
+        <div class="hero-overlay" style="background-color: rgba(0,0,0,0.4);"></div>
+        <!-- Logo centered -->
+        <div class="hero-logo">
+          <a href="/">
+            <img
+              src="//images.squarespace-cdn.com/content/v1/547225efe4b0922a0c06a8ba/1416768504346-4LN5M6UGV4MUAMRI8VFW/kph.png?format=1500w"
+              alt="Koa Pancake House"
+            />
+          </a>
+        </div>
+  
+        <!-- Navigation links -->
+        <nav class="hero-nav">
+          <ul>
+            <li><a href="https://koapancakehouse.square.site" target="_blank">Online Ordering</a></li>
+            <li><a href="#home-section">Home</a></li>
+            <li><a href="#new-page-1-section">Locations</a></li>
+            <li><a href="#restaurant-section">About</a></li>
+          <li><a href="#menu-section">Menu</a></li>
+          <li><a href="#catering-section">Catering</a></li>
+          <li><a href="/">Welcome</a></li>
+          <li><a href="/buy-egift-cards">Buy Egift Cards</a></li>
+          <li><a href="/employment">Employment</a></li>
+          <li><a href="/feedback">Feedback</a></li>
+        </ul>
+      </nav>
+
+      <!-- Big ORDER ONLINE button -->
+      <a
+        class="hero-button"
+        href="https://koapancakehouse.square.site"
+        target="_blank"
+      >
+        Order Online
+      </a>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+<!-- LOCATIONS SECTION (original code) -->
+<section id="new-page-1-section" class="index-section no-main-image page">
+    <div class="index-section-wrapper">
+      <div class="content page-content">
+        <div class="content-inner">
+            <h2 style="color: #FF8C00; text-align: left; margin-left: 200px; position: relative;">LOCATIONS</h2>
+          <div class="row mt-4">
+            <!-- Kaimuki -->
+            <div class="col-md-6 mb-4" style="padding-left: 200px;">
+              <h3><strong style="color: #FF8C00;">Kaimuki</strong></h3>
+              <p>1139 12th Ave, Honolulu, HI 96816</p>
+              <p>(808) 739-7778 (Kaimuki)</p>
+              <p>Open Daily: 6:30am-2:00pm</p>
+              <p><strong>DINE IN-</strong> OPEN</p>
+              <p><strong>PHONE ORDER-</strong> OPEN</p>
+              <p><strong>ONLINE ORDERING-</strong> OPEN</p>
+              <p><strong>TAKE OUT-</strong> OPEN</p>
+              <p><strong>UBEREATS-</strong> OPEN</p>
+            </div>
+            <!-- Moanalua Shopping Center -->
+            <div class="col-md-6 mb-4">
+              <h3><strong style="color: #FF8C00;">Moanalua Shopping Center</strong></h3>
+              <p>930 Valkenburgh St #101, Honolulu, HI 96818</p>
+              <p>(808) 422-6700</p>
+              <p>Open Daily: 6:30am-2:00pm</p>
+              <p><strong>DINE IN-</strong> OPEN</p>
+              <p><strong>PHONE ORDER-</strong> OPEN</p>
+              <p><strong>ONLINE ORDERING-</strong> OPEN</p>
+              <p><strong>TAKE OUT-</strong> OPEN</p>
+              <p><strong>UBEREATS-</strong> OPEN</p>
+            </div>
+
+            <!-- Kapolei Marketplace -->
+            <div class="col-md-6 mb-4" style="padding-left: 200px;">
+              <h3><strong style="color: #FF8C00;">Kapolei Marketplace</strong></h3>
+              <p>91-590 Farrington Hwy, Kapolei, HI 96707</p>
+              <p>(808) 693-8855</p>
+              <p>Open Daily: 6:30am-2:00pm</p>
+              <p><strong>DINE IN-</strong> OPEN</p>
+              <p><strong>PHONE ORDER-</strong> OPEN</p>
+              <p><strong>ONLINE ORDERING-</strong> OPEN</p>
+              <p><strong>TAKE OUT-</strong> OPEN</p>
+              <p><strong>UBEREATS-</strong> OPEN</p>
+            </div>
+            <!-- Hawaii Kai Town Center -->
+            <div class="col-md-6 mb-4">
+              <h3><strong style="color: #FF8C00;">Hawaii Kai Town Center</strong></h3>
+              <p>333 Keahole St #2e8, Honolulu, HI 96825</p>
+              <p>(808) 396-7000</p>
+              <p>Open Daily: 6:30am-2:00pm</p>
+              <p><strong>DINE IN-</strong> OPEN</p>
+              <p><strong>PHONE ORDER-</strong> OPEN</p>
+              <p><strong>ONLINE ORDERING-</strong> OPEN</p>
+              <p><strong>TAKE OUT-</strong> OPEN</p>
+              <p><strong>UBEREATS-</strong> OPEN</p>
+            </div>
+
+            <!-- Ka Makana Ali'i -->
+            <div class="col-md-6 mb-4" style="padding-left: 200px;">
+              <h3><strong style="color: #FF8C00;">Ka Makana Ali'i</strong></h3>
+              <p>91-5431 Kapolei Pkwy, Kapolei, HI 96707</p>
+              <p>(808) 628-4777</p>
+              <p>Open Daily: 6:30am-2:00pm</p>
+              <p><strong>DINE IN-</strong> OPEN</p>
+              <p><strong>PHONE ORDER-</strong> OPEN</p>
+              <p><strong>ONLINE ORDERING-</strong> OPEN</p>
+              <p><strong>TAKE OUT-</strong> OPEN</p>
+              <p><strong>UBEREATS-</strong> OPEN</p>
+            </div>
+            <!-- Waipahu Town Center & Wahiawa -->
+            <div class="col-md-6 mb-4">
+              <h3><strong style="color: #FF8C00;">Waipahu Town Center</strong></h3>
+              <p>94-050 Farrington Hwy C1-2, Waipahu, HI 96797</p>
+              <p>(808) 671-7172</p>
+              <p>Open Daily: 6:30am-2:00pm</p>
+              <p><strong>DINE IN-</strong> OPEN</p>
+              <p><strong>PHONE ORDER-</strong> OPEN</p>
+              <p><strong>ONLINE ORDERING-</strong> OPEN</p>
+              <p><strong>TAKE OUT-</strong> OPEN</p>
+              <p><strong>UBEREATS-</strong> OPEN</p>
+
+              <h3><strong style="color: #FF8C00;">Wahiawa</strong></h3>
+              <p>703 California Ave, Wahiawa, HI 96786</p>
+              <p>(808) 621-0123</p>
+              <p>Open Daily: 6:30am-2:00pm</p>
+              <p><strong>DINE IN-</strong> OPEN</p>
+              <p><strong>PHONE ORDER-</strong> OPEN</p>
+              <p><strong>ONLINE ORDERING-</strong> OPEN</p>
+              <p><strong>TAKE OUT-</strong> OPEN</p>
+              <p><strong>UBEREATS-</strong> OPEN</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+      <!-- ABOUT / RESTAURANT SECTION -->
+      <section id="restaurant-section" class="index-section no-main-image page">
+        <div class="index-section-wrapper">
+          <div class="content page-content">
+            <div class="content-inner">
+              <div class="row">
+                <div class="col-md-9" style="padding-left: 200px;">
+                  <h2 style="color: #FF8C00;">Who we are</h2>
+                  <p>
+                    Koa Pancake House is a fast casual breakfast restaurant
+                    proudly serving traditional breakfast and lunch plates with
+                    a Hawaiian flare. We are known for our reasonable prices,
+                    large portions, and quick service.
+                  </p>
+                  <h2 style="color: #FF8C00;">History</h2>
+                  <p>
+                    In 1988, husband and wife, Il Man and Sam Soon Chung opened
+                    up their very first dine-in breakfast and lunch restaurant
+                    on the island of O'ahu. Designed from Hawaiian Koa, one of
+                    the finest textured woods in world, the first Koa Pancake
+                    House was born.
+                  </p>
+                  <p>
+                    To expand the brand, the Chungs' decided to open up a second
+                    location in 2001, to provide a fast casual dining
+                    experience. Since then, six Koa Pancake Houses have been
+                    opened across the island.
+                  </p>
+                  <p>
+                    In 2014, the business was kept in the family when Juno
+                    Chung, son of Il Man and Sam Soon, took over. He plans to
+                    expand the brand throughout the islands of Hawai'i, to make
+                    Koa Pancake House the best breakfast and lunch option in not
+                    only Hawai'i, but all of the continental US.
+                  </p>
+                </div>
+                <div class="col-md-3">
+                  <!-- Spacer -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GALLERY SECTION -->
+      <section
+        id="gallery-section"
+        class="index-section gallery"
+      >
+        <div class="index-section-wrapper has-main-media has-main-image">
+          <div class="content gallery-content clear">
+            <div class="content-inner">
+              <div class="index-gallery">
+                <div class="gallery-wrapper">
+                  <div class="slide-wrapper">
+                    <div class="slide">
+                      <img
+                        src="https://images.squarespace-cdn.com/content/v1/547225efe4b0922a0c06a8ba/1529615586013-VQBR0RFWUGRF82YQQNO1/Koa-20.jpg"
+                        alt="Koa-20.jpg"
+                      />
+                    </div>
+                  </div>
+                  <div class="slide-wrapper">
+                    <div class="slide">
+                      <img
+                        src="https://images.squarespace-cdn.com/content/v1/547225efe4b0922a0c06a8ba/1529615585686-CFM0FSA310WQJXLT6YFK/Koa-74.jpg"
+                        alt="Koa-74.jpg"
+                      />
+                    </div>
+                  </div>
+                  <div class="slide-wrapper">
+                    <div class="slide">
+                      <img
+                        src="https://images.squarespace-cdn.com/content/v1/547225efe4b0922a0c06a8ba/1529615616998-F75TBAQMD2SA4XGY68T2/omelette.jpg"
+                        alt="omelette.jpg"
+                      />
+                    </div>
+                  </div>
+                  <div class="slide-wrapper">
+                    <div class="slide">
+                      <img
+                        src="https://images.squarespace-cdn.com/content/v1/547225efe4b0922a0c06a8ba/1529616858806-26KW63YP7639IP7GXVEY/eggsbene.jpg"
+                        alt="eggsbene.jpg"
+                      />
+                    </div>
+                  </div>
+                  <div class="slide-wrapper">
+                    <div class="slide">
+                      <img
+                        src="https://images.squarespace-cdn.com/content/v1/547225efe4b0922a0c06a8ba/1529616873415-ANJ997VFSV8WF82WZ5J4/Koa.jpg"
+                        alt="Koa.jpg"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MENU SECTION -->
+      <section id="menu-section" class="index-section no-main-image page">
+        <div class="index-section-wrapper">
+          <div class="content page-content">
+            <div class="content-inner">
+              <h2 class="text-center">Menu</h2>
+              <p class="text-center">
+                * Consuming raw or undercooked meats, poultry, seafood, shellfish,
+                or eggs may increase your risk of foodborne illness.
+              </p>
+              <div class="menu-wrapper menu-style-classic">
+                <div role="tablist" class="menu-selector mt-3">
+                  <label
+                    class="menu-select-labels menu-select-labels--active"
+                    >OMELETTES</label
+                  >
+                  <label class="menu-select-labels">BREAKFAST PLATES</label>
+                  <label class="menu-select-labels">BENEDICTS</label>
+                  <label class="menu-select-labels">PANCAKES</label>
+                  <label class="menu-select-labels">WAFFLES</label>
+                  <label class="menu-select-labels">FRENCH TOAST</label>
+                  <label class="menu-select-labels">CREPES</label>
+                  <label class="menu-select-labels">SMALL BITES</label>
+                  <label class="menu-select-labels">BURGERS & SANDWICHES</label>
+                  <label class="menu-select-labels">LUNCH</label>
+                  <label class="menu-select-labels">BUILD A MOCO</label>
+                  <label class="menu-select-labels">BEVERAGES</label>
+                  <label class="menu-select-labels">SIDE ORDERS</label>
+                </div>
+
+                <!-- We only show one “active” section in plain HTML, the rest hidden. -->
+                <div class="menus menus--has-multiple">
+                  <div class="menu js-menu" style="display: block">
+                    <div class="menu-section">
+                      <div class="menu-section-header">
+                        <div class="menu-section-title">OMELETTES</div>
+                        <div class="menu-section-description">
+                          Hearty Three Egg Omelettes served with ONE CHOICE of:
+                          PANCAKES, RICE, TOAST, or HOME FRIED POTATOES.
+                        </div>
+                      </div>
+                      <div class="menu-items mt-2">
+                        <div class="menu-item">
+                          <div class="menu-item-title">Denver Omelette</div>
+                          <div class="menu-item-description">
+                            Ham, Bell Pepper, Tomato, White Onion
+                          </div>
+                        </div>
+                        <div class="menu-item">
+                          <div class="menu-item-title">Koa Omelette</div>
+                          <div class="menu-item-description">
+                            Portuguese Sausage, Mushroom, Spinach, Cheese
+                          </div>
+                        </div>
+                        <div class="menu-item">
+                          <div class="menu-item-title">Meat Lovers</div>
+                          <div class="menu-item-description">
+                            Ham, Link Sausage, Portuguese Sausage &amp; Cheese
+                          </div>
+                        </div>
+                        <!-- Additional items as needed -->
+                      </div>
+                    </div>
+                  </div>
+                </div> <!-- end .menus -->
+              </div> <!-- end .menu-wrapper -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CATERING SECTION -->
+      <section id="catering-section" class="index-section page">
+        <div class="index-section-wrapper has-main-media has-main-image">
+          <div class="index-section-image content-fill">
+            <img
+              src="https://images.squarespace-cdn.com/content/v1/547225efe4b0922a0c06a8ba/1529617144320-6Q0K9ENJM652BR6NN3Y6/koa-pancake-house-strawberry-pancakes.jpg"
+              alt="koa-pancake-house-strawberry-pancakes.jpg"
+            />
+          </div>
+          <div class="index-image-overlay"></div>
+
+          <div class="content page-content has-main-media has-main-image">
+            <div class="content-inner">
+              <h2 class="text-center"><strong>CATERING MENU</strong></h2>
+              <p class="text-center">Catering orders are available Monday - Friday only</p>
+              <p class="text-center">
+                Plates, Utensils, and Condiments will be provided upon request
+              </p>
+
+              <!-- Example 3 columns for 10, 20, 50 Person Breakfast -->
+              <div class="row justify-content-center mt-4">
+                <div class="col-md-4 d-flex justify-content-center mb-3">
+                  <div
+                    style="
+                      width: 350px;
+                      text-align: center;
+                      background: #FFA600;
+                      border: 1px solid rgba(0,0,0,0.1);
+                      border-radius: 10px;
+                      box-shadow: -2px 10px 5px rgba(0,0,0,0);
+                      color: #fff;
+                      padding: 1rem;
+                    "
+                  >
+                    <p style="font-size: 20px; line-height: 1.5;">
+                      10 person Breakfast <br/><br/>
+                      20 Portuguese Sausage <br/>
+                      20 Link Sausage <br/>
+                      20 Bacon <br/>
+                      20 Scrambled Eggs <br/>
+                      20 Buttermilk Pancakes
+                    </p>
+                  </div>
+                </div>
+                <div class="col-md-4 d-flex justify-content-center mb-3">
+                  <div
+                    style="
+                      width: 350px;
+                      text-align: center;
+                      background: #FFA600;
+                      border: 1px solid rgba(0,0,0,0.1);
+                      border-radius: 10px;
+                      color: #fff;
+                      padding: 1rem;
+                    "
+                  >
+                    <p style="font-size: 20px; line-height: 1.5;">
+                      20 person Breakfast <br/><br/>
+                      40 Portuguese Sausage <br/>
+                      40 Link Sausage <br/>
+                      40 Bacon <br/>
+                      40 Scrambled Eggs <br/>
+                      40 Buttermilk Pancakes
+                    </p>
+                  </div>
+                </div>
+                <div class="col-md-4 d-flex justify-content-center mb-3">
+                  <div
+                    style="
+                      width: 350px;
+                      text-align: center;
+                      background: #FFA600;
+                      border: 1px solid rgba(0,0,0,0.1);
+                      border-radius: 10px;
+                      color: #fff;
+                      padding: 1rem;
+                    "
+                  >
+                    <p style="font-size: 20px; line-height: 1.5;">
+                      50 Person Breakfast <br/><br/>
+                      100 Portuguese Sausage <br/>
+                      100 Link Sausage <br/>
+                      100 Bacon <br/>
+                      100 Scrambled Eggs <br/>
+                      100 Buttermilk pancakes <br/>
+                      1 Small Tray Fried Rice
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <p class="text-center">
+                or call the store directly to place a phone order. <br/>
+                (<em>FOR ORDERS LARGER THAN 10 PEOPLE, PLEASE GIVE US A NOTICE OF
+                AT LEAST 24 HOURS BEFORE THE PICKUP TIME</em>)
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Pre-Footer -->
+    <div id="preFooter" class="mt-5">
+      <div class="pre-footer-inner container">
+        <div class="row">
+          <div class="col-12">
+            <div class="social-icon-alignment-center">
+              <!-- Social icon placeholders -->
+              <div class="sqs-svg-icon--wrapper"></div>
+              <div class="sqs-svg-icon--wrapper"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer id="footer" role="contentinfo">
+      <div class="footer-inner container">
+        <p class="mt-3 text-center">
+          Powered by <a href="http://www.squarespace.com" target="_blank">Squarespace</a>
+        </p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
